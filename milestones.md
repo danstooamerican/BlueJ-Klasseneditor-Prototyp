@@ -25,10 +25,10 @@
 	- Aggregation
 	- Komposition
 	- Assoziation (mit Kardinalitäten)
-	- Assoziationsklasse
-	- Enum
-- Darstellung von Beziehungen verbessern (nicht nur geradlinig)
+	- Assoziationsklasse (optional)
+	- Enum (optional)
 - Konfigurationsmöglichkeit von verfügbaren Elementen
 - Syntaxüberprüfung während das Klassendiagramm erstellt wird
-- Möglichkeit Klassen zu Paketen zuzuordnen
-- Klassendiagramm aus bestehenden Code generieren
+- Darstellung von Beziehungen verbessern (nicht nur geradlinig) (optional)
+- Möglichkeit Klassen zu Paketen zuzuordnen (optional)
+- Klassendiagramm aus bestehenden Code generieren (optional)
