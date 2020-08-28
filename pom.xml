@@ -39,6 +39,31 @@
             <version>1.0</version>
             <systemPath>${basedir}\libs\bluejext.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.saxsys</groupId>
+            <artifactId>mvvmfx</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -48,7 +73,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>bluej_adapters.Startup</mainClass>
+                    <mainClass>class_diagram_editor.bluej_adapters.BlueJExtension</mainClass>
                 </configuration>
             </plugin>
 
@@ -65,7 +90,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        bluej_adapters.Startup
+                                        class_diagram_editor.bluej_adapters.BlueJExtension
                                     </mainClass>
                                 </manifest>
                             </archive>
