@@ -1,15 +1,15 @@
-package bluej_adapters;
+package class_diagram_editor.bluej_adapters;
 
 import bluej.extensions.BlueJ;
 import bluej.extensions.Extension;
-import bluej_adapters.menu.BlueJMenuGenerator;
+import class_diagram_editor.ClassEditorApplication;
+import class_diagram_editor.bluej_adapters.menu.BlueJMenuGenerator;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import presentation.ClassEditorApplication;
 
 import java.awt.EventQueue;
 
-public class Startup extends Extension {
+public class BlueJExtension extends Extension {
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -25,8 +25,6 @@ public class Startup extends Extension {
 
     public void startup(BlueJ blueJ) {
         blueJ.setMenuGenerator(new BlueJMenuGenerator());
-
-        blueJ.addPackageListener(new BlueJPackeListener());
     }
 
     public String getName() {
