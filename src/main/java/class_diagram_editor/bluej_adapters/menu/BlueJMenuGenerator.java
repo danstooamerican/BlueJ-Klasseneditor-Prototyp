@@ -6,7 +6,7 @@ import bluej.extensions.MenuGenerator;
 import bluej.extensions.ProjectNotOpenException;
 import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.bluej_adapters.source_control.SourceControl;
-import class_diagram_editor.diagram.DiagramSource;
+import class_diagram_editor.diagram.SourceCodeControl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -25,11 +25,11 @@ public class BlueJMenuGenerator extends MenuGenerator {
     }
 
     private static class OpenClassEditorAction extends AbstractAction {
-        private final DiagramSource diagramSource;
+        private final SourceCodeControl sourceCodeControl;
         private final String projectTitle;
 
-        public OpenClassEditorAction(String projectTitle, DiagramSource diagramSource) {
-            this.diagramSource = diagramSource;
+        public OpenClassEditorAction(String projectTitle, SourceCodeControl sourceCodeControl) {
+            this.sourceCodeControl = sourceCodeControl;
             this.projectTitle = projectTitle;
 
             putValue(AbstractAction.NAME, "Klasseneditor öffnen");
@@ -37,7 +37,7 @@ public class BlueJMenuGenerator extends MenuGenerator {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            new ClassEditorApplication(projectTitle, diagramSource).run();
+            new ClassEditorApplication(projectTitle, sourceCodeControl).run();
         }
     }
 }

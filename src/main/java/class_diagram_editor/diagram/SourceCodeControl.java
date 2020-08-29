@@ -2,8 +2,10 @@ package class_diagram_editor.diagram;
 
 import java.util.Collection;
 
-public interface DiagramSource {
+public interface SourceCodeControl {
 
     Collection<Class> getAvailableClasses();
+
+    void generateClass(Class c);
 
 }

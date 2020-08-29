@@ -1,6 +1,6 @@
 package class_diagram_editor;
 
-import class_diagram_editor.diagram.DiagramSource;
+import class_diagram_editor.diagram.SourceCodeControl;
 import class_diagram_editor.presentation.main_screen.MainScreenView;
 import class_diagram_editor.presentation.main_screen.MainScreenViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -13,16 +13,16 @@ import javafx.stage.Stage;
 public class ClassEditorApplication extends Application implements Runnable {
 
     private final String title;
-    private final DiagramSource diagramSource;
+    private final SourceCodeControl sourceCodeControl;
 
-    public ClassEditorApplication(String projectTitle, DiagramSource diagramSource) {
+    public ClassEditorApplication(String projectTitle, SourceCodeControl sourceCodeControl) {
         this.title = "Klasseneditor: " + projectTitle;
-        this.diagramSource = diagramSource;
+        this.sourceCodeControl = sourceCodeControl;
     }
 
     public ClassEditorApplication() {
         this.title = "Klasseneditor";
-        this.diagramSource = null;
+        this.sourceCodeControl = null;
     }
 
     public static void main(String[] args) {
@@ -35,11 +35,10 @@ public class ClassEditorApplication extends Application implements Runnable {
 
         ViewTuple<MainScreenView, MainScreenViewModel> viewTuple = FluentViewLoader.fxmlView(MainScreenView.class)
                 .codeBehind(new MainScreenView())
+                .viewModel(new MainScreenViewModel(sourceCodeControl))
                 .load();
 
         Parent root = viewTuple.getView();
-
-        viewTuple.getViewModel().setDiagramSource(diagramSource);
 
         stage.setScene(new Scene(root));
         stage.show();
