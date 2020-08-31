@@ -21,7 +21,4 @@
          </children>
       </VBox>
    </right>
-   <center>
-      <Label fx:id="lblClasses" text="Hello World" BorderPane.alignment="CENTER" />
-   </center>
 </BorderPane>

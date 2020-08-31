@@ -16,15 +16,10 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private MainScreenViewModel viewModel;
 
     @FXML
-    private Label lblClasses;
-
-    @FXML
     private Button btnGenerateCode;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lblClasses.textProperty().bind(viewModel.classesProperty());
-
         btnGenerateCode.setOnAction((e) -> {
             viewModel.generateCode();
         });
