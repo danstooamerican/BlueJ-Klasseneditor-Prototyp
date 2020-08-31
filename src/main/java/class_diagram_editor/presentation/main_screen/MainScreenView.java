@@ -18,10 +18,17 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @FXML
     private Button btnGenerateCode;
 
+    @FXML
+    private Button btnAddRandomClass;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btnGenerateCode.setOnAction((e) -> {
             viewModel.generateCode();
+        });
+
+        btnAddRandomClass.setOnAction((e) -> {
+            viewModel.addRandomClass();
         });
     }
 }

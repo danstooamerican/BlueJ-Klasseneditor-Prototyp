@@ -20,4 +20,8 @@ public class MainScreenViewModel implements ViewModel {
     public void generateCode() {
         sourceCodeControl.generate(classDiagram);
     }
+
+    public void addRandomClass() {
+        classDiagram.addClass(new Class("Class" + (int) (Math.random() * 100)));
+    }
 }
