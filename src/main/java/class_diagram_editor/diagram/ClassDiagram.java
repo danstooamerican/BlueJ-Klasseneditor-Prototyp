@@ -1,7 +1,6 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
-import lombok.Getter;
 
 import java.util.*;
 

@@ -5,7 +5,7 @@ import class_diagram_editor.diagram.Class;
 class ClassModel {
 
     def String generate(Class c) '''
-        public class «c.getName()» {
+        public «IF c.isAbstract()»abstract«ENDIF»class «c.getName()» «IF c.isExtending()»extends «c.getExtends()»«ENDIF» {
 
         }
     '''
