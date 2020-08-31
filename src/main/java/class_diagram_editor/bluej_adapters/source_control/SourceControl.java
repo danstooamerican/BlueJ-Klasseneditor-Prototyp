@@ -3,82 +3,111 @@ package class_diagram_editor.bluej_adapters.source_control;
 import bluej.extensions.*;
 import bluej.extensions.editor.Editor;
 import bluej.extensions.editor.TextLocation;
+import class_diagram_editor.code_generation.CodeElement;
+import class_diagram_editor.code_generation.CodeGenerator;
 import class_diagram_editor.diagram.Class;
+import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.SourceCodeControl;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
 public class SourceControl implements SourceCodeControl {
 
+    private static final TextLocation START_LOCATION = new TextLocation(0, 0);
+
     private final BProject project;
+    private final CodeGenerator codeGenerator;
 
     public SourceControl(BProject project) {
         this.project = project;
+        this.codeGenerator = new CodeGenerator();
     }
 
     @Override
-    public Collection<Class> getAvailableClasses() {
-        Collection<Class> classes = new ArrayList<>();
-
-        try {
-            for (BPackage bPackage : project.getPackages()) {
-                try {
-                    classes.addAll(Stream.of(bPackage.getClasses())
-                            .map(bClass -> new Class(bClass.getName()))
-                            .collect(toList()));
-                } catch (PackageNotFoundException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        } catch (ProjectNotOpenException e) {
-            System.err.println(e.getMessage());
-            classes = Collections.emptyList();
-        }
-
-        return classes;
-    }
-
-    @Override
-    public void generateClass(Class c) {
-        Editor editor = null;
+    public void generate(ClassDiagram classDiagram) {
+        Iterator<CodeElement> iterator = classDiagram.iterator();
 
         try {
             BPackage bpackage = project.getPackages()[0];
-            BClass bclass;
 
-            File javaFile = new File(bpackage.getDir(), c.getName() + ".java");
+            while (iterator.hasNext()) {
+                CodeElement codeElement = iterator.next();
 
-            if (!javaFile.exists()) {
-                javaFile.createNewFile();
+                Editor editor = createFile(bpackage, codeElement);
 
-                bclass = bpackage.newClass(c.getName(), SourceType.Java);
-            } else {
-                bclass = bpackage.getBClass(c.getName());
+                if (editor != null) {
+                    generateElement(editor, codeElement);
+                } else {
+                    System.err.println("Error generating code for " + codeElement.getName() + ".java");
+                }
             }
-
-            editor = bclass.getEditor();
-            editor.setReadOnly(true);
-
-            // line index is zero indexed
-            int lastLine = editor.getLineCount() - 1;
-            int lastColumn = editor.getLineLength(lastLine);
-
-            editor.setText(new TextLocation(0, 0), new TextLocation(lastLine, lastColumn), "Hello World");
-
-            editor.saveFile();
-        } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException | IOException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            if (editor != null) {
-                editor.setReadOnly(false);
-            }
+        } catch (ProjectNotOpenException e) {
+            e.printStackTrace();
         }
+    }
+
+    private Editor createFile(BPackage bPackage, CodeElement codeElement) {
+        Editor editor = null;
+
+        try {
+            File javaFile = new File(bPackage.getDir(), codeElement.getName() + ".java");
+
+            if (javaFile.exists()) {
+                editor = getBlueJEditor(bPackage, codeElement);
+            } else {
+                if (javaFile.createNewFile()) {
+                    editor = createBlueJEditor(bPackage, codeElement);
+                }
+            }
+        } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return editor;
+    }
+
+    private Editor createBlueJEditor(BPackage bpackage, CodeElement codeElement)
+            throws ProjectNotOpenException, MissingJavaFileException, PackageNotFoundException {
+        switch (codeElement.getType()) {
+            case CLASS:
+                return bpackage.newClass(codeElement.getName()).getEditor();
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private Editor getBlueJEditor(BPackage bpackage, CodeElement codeElement)
+            throws ProjectNotOpenException, PackageNotFoundException {
+        switch (codeElement.getType()) {
+            case CLASS:
+                return bpackage.getBClass(codeElement.getName()).getEditor();
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private void generateElement(Editor editor, CodeElement codeElement) {
+        editor.setReadOnly(true);
+
+        // line index is zero indexed
+        int lastLine = editor.getLineCount() - 1;
+        int lastColumn = editor.getLineLength(lastLine);
+
+        codeElement.accept(codeGenerator);
+
+        editor.setText(START_LOCATION, new TextLocation(lastLine, lastColumn), codeGenerator.getLastGeneratedCode());
+
+        editor.saveFile();
+
+        editor.setReadOnly(false);
     }
 }
