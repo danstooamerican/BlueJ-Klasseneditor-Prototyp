@@ -64,6 +64,12 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.30</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.xtend</groupId>
+            <artifactId>org.eclipse.xtend.lib</artifactId>
+            <version>2.22.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,6 +81,24 @@
                 <configuration>
                     <mainClass>class_diagram_editor.bluej_adapters.BlueJExtension</mainClass>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.xtend</groupId>
+                <artifactId>xtend-maven-plugin</artifactId>
+                <version>2.22.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/xtend-gen/main</outputDirectory>
+                            <testOutputDirectory>${project.build.directory}/xtend-gen/test</testOutputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
