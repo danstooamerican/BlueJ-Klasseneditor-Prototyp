@@ -3,17 +3,17 @@ package class_diagram_editor.diagram.code_generation;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
-public class ClassModel {
+public class ClassGenerator {
   public String generate(final class_diagram_editor.diagram.Class c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public ");
     {
       boolean _isAbstract = c.isAbstract();
       if (_isAbstract) {
-        _builder.append("abstract");
+        _builder.append("abstract ");
       }
     }
-    _builder.append(" class ");
+    _builder.append("class ");
     String _name = c.getName();
     _builder.append(_name);
     _builder.append(" ");

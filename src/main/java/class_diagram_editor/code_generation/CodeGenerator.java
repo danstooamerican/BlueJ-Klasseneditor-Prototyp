@@ -1,8 +1,8 @@
 package class_diagram_editor.code_generation;
 
 import class_diagram_editor.diagram.Class;
-import class_diagram_editor.diagram.code_generation.ClassModel;
 import lombok.Getter;
+import class_diagram_editor.diagram.code_generation.ClassGenerator;
 
 @Getter
 public class CodeGenerator {
@@ -14,7 +14,7 @@ public class CodeGenerator {
     }
 
     public void visitClass(Class c) {
-        ClassModel classModel = new ClassModel();
+        ClassGenerator classModel = new ClassGenerator();
 
         generate(classModel.generate(c));
     }
