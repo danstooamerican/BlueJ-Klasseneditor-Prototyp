@@ -1,24 +1,20 @@
 package class_diagram_editor.bluej_adapters.source_control;
 
-import bluej.extensions.*;
+import bluej.extensions.BPackage;
+import bluej.extensions.BProject;
+import bluej.extensions.MissingJavaFileException;
+import bluej.extensions.PackageNotFoundException;
+import bluej.extensions.ProjectNotOpenException;
 import bluej.extensions.editor.Editor;
 import bluej.extensions.editor.TextLocation;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
-import class_diagram_editor.diagram.Class;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.SourceCodeControl;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 public class SourceControl implements SourceCodeControl {
 
@@ -81,7 +77,7 @@ public class SourceControl implements SourceCodeControl {
             case CLASS:
                 return bpackage.newClass(codeElement.getName()).getEditor();
             default:
-                throw new NotImplementedException();
+                throw new IllegalArgumentException();
         }
     }
 
@@ -91,7 +87,7 @@ public class SourceControl implements SourceCodeControl {
             case CLASS:
                 return bpackage.getBClass(codeElement.getName()).getEditor();
             default:
-                throw new NotImplementedException();
+                throw new IllegalArgumentException();
         }
     }
 
