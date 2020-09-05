@@ -4,9 +4,7 @@ import class_diagram_editor.diagram.Class;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 public class CanvasClassDiagramNode extends Canvas implements DiagramNode {
 

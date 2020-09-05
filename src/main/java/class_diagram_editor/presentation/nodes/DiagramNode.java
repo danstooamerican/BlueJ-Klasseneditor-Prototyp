@@ -8,6 +8,10 @@ public interface DiagramNode {
 
     double getCenterY();
 
+    double getWidth();
+
+    double getHeight();
+
     Node getNode();
 
 }
