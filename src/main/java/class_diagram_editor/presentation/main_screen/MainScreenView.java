@@ -16,6 +16,8 @@ import javafx.scene.Node;
 import javafx.scene.ParallelCamera;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -39,6 +41,9 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @FXML
     private SubScene sbsDiagram;
 
+    @FXML
+    private Pane pnlDiagram;
+
     private double startDragX;
     private double startDragY;
 
@@ -60,6 +65,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         btnAddRandomClass.setOnAction((e) -> {
             viewModel.addRandomClass();
         });
+
+        sbsDiagram.setWidth(pnlDiagram.getWidth());
+        sbsDiagram.setHeight(pnlDiagram.getHeight());
+        sbsDiagram.heightProperty().bind(pnlDiagram.heightProperty());
+        sbsDiagram.widthProperty().bind(pnlDiagram.widthProperty());
 
         sbsDiagram.setFill(Color.GRAY);
 
