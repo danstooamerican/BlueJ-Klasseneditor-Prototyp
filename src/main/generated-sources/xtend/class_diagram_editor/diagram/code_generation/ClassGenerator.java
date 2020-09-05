@@ -25,9 +25,10 @@ public class ClassGenerator extends Generator<class_diagram_editor.diagram.Class
         _builder.append("extends ");
         String _extends = c.getExtends();
         _builder.append(_extends);
+        _builder.append(" ");
       }
     }
-    _builder.append(" {");
+    _builder.append("{");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("}");
