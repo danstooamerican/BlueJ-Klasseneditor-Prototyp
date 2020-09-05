@@ -77,9 +77,17 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             targetNodeDragStartY = targetNode.translateYProperty().get();
         });
 
+        sbsDiagram.setOnScroll(event -> {
+            final double zoomSpeed = 0.05;
+            double direction = event.getDeltaY() > 0 ? -1 : 1;
+
+            camera.setScaleX(camera.getScaleX() + direction * zoomSpeed);
+            camera.setScaleY(camera.getScaleY() + direction * zoomSpeed);
+        });
+
         sbsDiagram.setOnMouseDragged(event -> {
-            targetNode.translateXProperty().setValue(targetNodeDragStartX - (startDragX - event.getX()));
-            targetNode.translateYProperty().setValue(targetNodeDragStartY - (startDragY - event.getY()));
+            targetNode.translateXProperty().setValue(targetNodeDragStartX - camera.getScaleX() * (startDragX - event.getX()));
+            targetNode.translateYProperty().setValue(targetNodeDragStartY - camera.getScaleY() * (startDragY - event.getY()));
         });
 
         viewModel.getCodeElements().addListener((ListChangeListener<CodeElement>) c -> {
