@@ -1,6 +1,8 @@
 package class_diagram_editor.presentation.main_screen;
 
 import class_diagram_editor.code_generation.CodeElement;
+import class_diagram_editor.diagram.Class;
+import class_diagram_editor.presentation.nodes.ClassNode;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.collections.ListChangeListener;
@@ -53,8 +55,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         sbsDiagram.setFill(Color.GRAY);
 
         Group group = new Group();
-        group.getChildren().add(new Rectangle(100, 100, Color.BLACK));
-        group.getChildren().add(new Rectangle(100, 100, Color.BLUE));
 
         sbsDiagram.setRoot(group);
 
@@ -83,7 +83,12 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         });
 
         viewModel.getCodeElements().addListener((ListChangeListener<CodeElement>) c -> {
-
+            c.next();
+            c.getAddedSubList().forEach(codeElement -> {
+                if (codeElement instanceof Class) {
+                    group.getChildren().add(new ClassNode((Class) codeElement));
+                }
+            });
         });
     }
 }

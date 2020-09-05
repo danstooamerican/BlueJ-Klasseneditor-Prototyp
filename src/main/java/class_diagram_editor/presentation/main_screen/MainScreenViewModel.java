@@ -6,13 +6,13 @@ import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.SourceCodeControl;
 import class_diagram_editor.diagram.Subject;
 import de.saxsys.mvvmfx.ViewModel;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainScreenViewModel implements ViewModel, Subject<ClassDiagram> {
     private final SourceCodeControl sourceCodeControl;
@@ -20,11 +20,13 @@ public class MainScreenViewModel implements ViewModel, Subject<ClassDiagram> {
     private final ClassDiagram classDiagram;
 
     private final ObservableList<CodeElement> codeElements;
+    private final Set<String> displayedCodeElements;
 
     public MainScreenViewModel(SourceCodeControl sourceCodeControl) {
         this.sourceCodeControl = sourceCodeControl;
         this.classDiagram = new ClassDiagram();
         this.codeElements = FXCollections.observableArrayList();
+        this.displayedCodeElements = new HashSet<>();
 
         classDiagram.subscribe(this);
         update(classDiagram);
@@ -52,7 +54,11 @@ public class MainScreenViewModel implements ViewModel, Subject<ClassDiagram> {
 
     @Override
     public void update(ClassDiagram observable) {
-        codeElements.clear();
-        codeElements.addAll(classDiagram.getCodeElements());
+        classDiagram.getCodeElements().forEach(codeElement -> {
+            if (!displayedCodeElements.contains(codeElement.getName())) {
+                codeElements.add(codeElement);
+                displayedCodeElements.add(codeElement.getName());
+            }
+        });
     }
 }
