@@ -58,10 +58,10 @@ public class SourceControl implements SourceCodeControl {
             File javaFile = new File(bPackage.getDir(), codeElement.getName() + ".java");
 
             if (javaFile.exists()) {
-                editor = getBlueJEditor(bPackage, codeElement);
+                editor = bPackage.getBClass(codeElement.getName()).getEditor();
             } else {
                 if (javaFile.createNewFile()) {
-                    editor = createBlueJEditor(bPackage, codeElement);
+                    editor = bPackage.newClass(codeElement.getName()).getEditor();
                 }
             }
         } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException | IOException e) {
@@ -69,26 +69,6 @@ public class SourceControl implements SourceCodeControl {
         }
 
         return editor;
-    }
-
-    private Editor createBlueJEditor(BPackage bpackage, CodeElement codeElement)
-            throws ProjectNotOpenException, MissingJavaFileException, PackageNotFoundException {
-        switch (codeElement.getType()) {
-            case CLASS:
-                return bpackage.newClass(codeElement.getName()).getEditor();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-
-    private Editor getBlueJEditor(BPackage bpackage, CodeElement codeElement)
-            throws ProjectNotOpenException, PackageNotFoundException {
-        switch (codeElement.getType()) {
-            case CLASS:
-                return bpackage.getBClass(codeElement.getName()).getEditor();
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 
     private void generateElement(Editor editor, CodeElement codeElement) {
