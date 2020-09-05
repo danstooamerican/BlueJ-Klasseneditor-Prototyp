@@ -38,6 +38,7 @@ public class MainScreenViewModel implements ViewModel, Subject<ClassDiagram> {
 
     public void addRandomClass() {
         CodeElement extendsClass = null;
+
         if (Math.random() < 0.5) {
             List<CodeElement> codeElementList = new ArrayList<>(classDiagram.getCodeElements());
 
@@ -45,7 +46,10 @@ public class MainScreenViewModel implements ViewModel, Subject<ClassDiagram> {
                 extendsClass = codeElementList.get((int)(Math.random() * (codeElementList.size() - 1)));
             }
         }
-        classDiagram.addClass(new Class(Math.random() < 0.5, "Class" + (int) (Math.random() * 100), (Class) extendsClass));
+
+        Class c = new Class(Math.random() < 0.5, "Class" + (int) (Math.random() * 100), (Class) extendsClass);
+
+        classDiagram.addClass(c);
     }
 
     public ObservableList<CodeElement> getCodeElements() {
