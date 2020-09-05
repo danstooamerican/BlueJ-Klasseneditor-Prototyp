@@ -1,9 +1,11 @@
 package class_diagram_editor.diagram.code_generation;
 
+import class_diagram_editor.code_generation.generators.Generator;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
-public class ClassGenerator {
+public class ClassGenerator extends Generator<class_diagram_editor.diagram.Class> {
+  @Override
   public String generate(final class_diagram_editor.diagram.Class c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public ");
