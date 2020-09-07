@@ -5,6 +5,7 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import de.tesis.dynaware.grapheditor.Commands;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
+import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GNode;
@@ -51,13 +52,20 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         sbsDiagram.widthProperty().bind(pnlDiagram.widthProperty());
 
         GraphEditor graphEditor = new DefaultGraphEditor();
+        GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
+
+        graphEditor.getProperties().setGridVisible(true);
 
         GModel model = GraphFactory.eINSTANCE.createGModel();
+        model.setContentWidth(10000);
+        model.setContentHeight(10000);
+
         graphEditor.setModel(model);
+        graphEditorContainer.setGraphEditor(graphEditor);
 
         addNodes(model);
 
-        sbsDiagram.setRoot(graphEditor.getView());
+        sbsDiagram.setRoot(graphEditorContainer);
     }
 
     private void addNodes(GModel model) {
@@ -78,7 +86,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     }
 
     private GNode createNode() {
-
         GNode node = GraphFactory.eINSTANCE.createGNode();
 
         GConnector input = GraphFactory.eINSTANCE.createGConnector();
