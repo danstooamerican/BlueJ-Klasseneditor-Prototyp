@@ -54,8 +54,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         GraphEditor graphEditor = new DefaultGraphEditor();
         GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
 
-        graphEditor.getProperties().setGridVisible(true);
-
         GModel model = GraphFactory.eINSTANCE.createGModel();
         model.setContentWidth(10000);
         model.setContentHeight(10000);
