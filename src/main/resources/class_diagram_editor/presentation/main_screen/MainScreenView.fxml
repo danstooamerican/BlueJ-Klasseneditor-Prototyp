@@ -34,7 +34,7 @@
    <center>
       <Pane fx:id="pnlDiagram" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <children>
-            <SubScene fx:id="sbsDiagram" fill="#dd2e2e" height="700.0" width="850.0">
+            <SubScene fx:id="sbsDiagram" height="200.0" width="200.0">
               <root>
                 <Region />
               </root>

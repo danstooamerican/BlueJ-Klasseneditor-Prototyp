@@ -1,30 +1,21 @@
 package class_diagram_editor.presentation.main_screen;
 
-import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.diagram.Class;
-import class_diagram_editor.presentation.nodes.CanvasClassDiagramNode;
-import class_diagram_editor.presentation.nodes.DiagramNode;
-import class_diagram_editor.presentation.nodes.ExtendsArrowNode;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.collections.ListChangeListener;
+import de.tesis.dynaware.grapheditor.Commands;
+import de.tesis.dynaware.grapheditor.GraphEditor;
+import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
+import de.tesis.dynaware.grapheditor.model.GConnector;
+import de.tesis.dynaware.grapheditor.model.GModel;
+import de.tesis.dynaware.grapheditor.model.GNode;
+import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Camera;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.ParallelCamera;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializable {
@@ -39,25 +30,13 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private Button btnAddRandomClass;
 
     @FXML
-    private SubScene sbsDiagram;
-
-    @FXML
     private Pane pnlDiagram;
 
-    private double startDragX;
-    private double startDragY;
-
-    private double targetNodeDragStartX;
-    private double targetNodeDragStartY;
-
-    private Node targetNode;
-
-    private Map<String, DiagramNode> hookableNodes;
+    @FXML
+    private SubScene sbsDiagram;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.hookableNodes = new HashMap<>();
-
         btnGenerateCode.setOnAction((e) -> {
             viewModel.generateCode();
         });
@@ -71,64 +50,46 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         sbsDiagram.heightProperty().bind(pnlDiagram.heightProperty());
         sbsDiagram.widthProperty().bind(pnlDiagram.widthProperty());
 
-        sbsDiagram.setFill(Color.GRAY);
+        GraphEditor graphEditor = new DefaultGraphEditor();
 
-        Group group = new Group();
+        GModel model = GraphFactory.eINSTANCE.createGModel();
+        graphEditor.setModel(model);
 
-        sbsDiagram.setRoot(group);
+        addNodes(model);
 
-        Camera camera = new ParallelCamera();
-        sbsDiagram.setCamera(camera);
+        sbsDiagram.setRoot(graphEditor.getView());
+    }
 
-        sbsDiagram.setOnMousePressed(event -> {
-            startDragX = event.getX();
-            startDragY = event.getY();
+    private void addNodes(GModel model) {
 
-            Node pickedNode = event.getPickResult().getIntersectedNode();
+        GNode firstNode = createNode();
+        GNode secondNode = createNode();
 
-            if (pickedNode instanceof DiagramNode) {
-                targetNode = pickedNode;
-            } else {
-                targetNode = camera;
-            }
+        firstNode.setX(150);
+        firstNode.setY(150);
 
-            targetNodeDragStartX = targetNode.translateXProperty().get();
-            targetNodeDragStartY = targetNode.translateYProperty().get();
-        });
+        secondNode.setX(400);
+        secondNode.setY(200);
+        secondNode.setWidth(200);
+        secondNode.setHeight(150);
 
-        sbsDiagram.setOnScroll(event -> {
-            final double zoomSpeed = 0.05;
-            double direction = event.getDeltaY() > 0 ? -1 : 1;
+        Commands.addNode(model, firstNode);
+        Commands.addNode(model, secondNode);
+    }
 
-            camera.setScaleX(camera.getScaleX() + direction * zoomSpeed);
-            camera.setScaleY(camera.getScaleY() + direction * zoomSpeed);
-        });
+    private GNode createNode() {
 
-        sbsDiagram.setOnMouseDragged(event -> {
-            targetNode.translateXProperty().setValue(targetNodeDragStartX - camera.getScaleX() * (startDragX - event.getX()));
-            targetNode.translateYProperty().setValue(targetNodeDragStartY - camera.getScaleY() * (startDragY - event.getY()));
-        });
+        GNode node = GraphFactory.eINSTANCE.createGNode();
 
-        viewModel.getCodeElements().addListener((ListChangeListener<CodeElement>) c -> {
-            c.next();
-            c.getAddedSubList().forEach(codeElement -> {
-                Collection<Node> diagramNodesToAdd = new ArrayList<>();
+        GConnector input = GraphFactory.eINSTANCE.createGConnector();
+        GConnector output = GraphFactory.eINSTANCE.createGConnector();
 
-                if (codeElement instanceof Class) {
-                    CanvasClassDiagramNode classDiagramNode = new CanvasClassDiagramNode((Class) codeElement);
+        input.setType("left-input");
+        output.setType("right-output");
 
-                    if (classDiagramNode.isExtending()) {
-                        Node hookNode = new ExtendsArrowNode(classDiagramNode, hookableNodes.get(classDiagramNode.getExtendsName()));
+        node.getConnectors().add(input);
+        node.getConnectors().add(output);
 
-                        diagramNodesToAdd.add(hookNode);
-                    }
-
-                    diagramNodesToAdd.add(classDiagramNode);
-                    hookableNodes.put(codeElement.getName(), classDiagramNode);
-                }
-
-                group.getChildren().addAll(diagramNodesToAdd);
-            });
-        });
+        return node;
     }
 }
