@@ -4,13 +4,13 @@ import class_diagram_editor.code_generation.generators.Generator;
 import org.eclipse.xtend2.lib.StringConcatenation;
 
 @SuppressWarnings("all")
-public class ClassGenerator extends Generator<class_diagram_editor.diagram.Class> {
+public class ClassGenerator extends Generator<class_diagram_editor.diagram.model.classdiagram.ClassModel> {
   @Override
-  public String generate(final class_diagram_editor.diagram.Class c) {
+  public String generate(final class_diagram_editor.diagram.model.classdiagram.ClassModel c) {
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("public ");
     {
-      boolean _isAbstract = c.isAbstract();
+      boolean _isAbstract = c.isAbstractClass();
       if (_isAbstract) {
         _builder.append("abstract ");
       }
@@ -20,10 +20,10 @@ public class ClassGenerator extends Generator<class_diagram_editor.diagram.Class
     _builder.append(_name);
     _builder.append(" ");
     {
-      boolean _isExtending = c.isExtending();
+      boolean _isExtending = c.getExtends() != null;
       if (_isExtending) {
         _builder.append("extends ");
-        String _extends = c.getExtends();
+        String _extends = c.getExtends().getName();
         _builder.append(_extends);
         _builder.append(" ");
       }

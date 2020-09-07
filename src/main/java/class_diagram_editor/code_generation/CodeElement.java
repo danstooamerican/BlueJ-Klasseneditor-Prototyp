@@ -4,8 +4,6 @@ public interface CodeElement {
 
     String getName();
 
-    CodeElementType getType();
-
     void accept(CodeGenerator codeGenerator);
 
 }

@@ -1,5 +1,7 @@
 package class_diagram_editor.presentation.main_screen;
 
+import class_diagram_editor.diagram.model.classdiagram.ClassDiagram;
+import class_diagram_editor.diagram.model.classdiagram.ClassdiagramPackage;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import de.tesis.dynaware.grapheditor.Commands;
@@ -15,6 +17,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,47 +61,26 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         GraphEditor graphEditor = new DefaultGraphEditor();
         GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
 
-        GModel model = GraphFactory.eINSTANCE.createGModel();
-        model.setContentWidth(10000);
-        model.setContentHeight(10000);
+        graphEditor.setOnConnectionCreated(connection -> {
+            connection.getSource().getParent().getConnectors().add(GraphFactory.eINSTANCE.createGConnector());
+            
+            return null;
+        });
 
-        graphEditor.setModel(model);
+        GModel graphModel = GraphFactory.eINSTANCE.createGModel();
+
+        graphModel.setContentWidth(10000);
+        graphModel.setContentHeight(10000);
+
+        graphEditor.setModel(graphModel);
+
+        EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
+        viewModel.init(domain, graphModel);
+
         graphEditorContainer.setGraphEditor(graphEditor);
 
-        addNodes(model);
+        graphEditorContainer.panTo(5000, 5000);
 
         sbsDiagram.setRoot(graphEditorContainer);
-    }
-
-    private void addNodes(GModel model) {
-
-        GNode firstNode = createNode();
-        GNode secondNode = createNode();
-
-        firstNode.setX(150);
-        firstNode.setY(150);
-
-        secondNode.setX(400);
-        secondNode.setY(200);
-        secondNode.setWidth(200);
-        secondNode.setHeight(150);
-
-        Commands.addNode(model, firstNode);
-        Commands.addNode(model, secondNode);
-    }
-
-    private GNode createNode() {
-        GNode node = GraphFactory.eINSTANCE.createGNode();
-
-        GConnector input = GraphFactory.eINSTANCE.createGConnector();
-        GConnector output = GraphFactory.eINSTANCE.createGConnector();
-
-        input.setType("left-input");
-        output.setType("right-output");
-
-        node.getConnectors().add(input);
-        node.getConnectors().add(output);
-
-        return node;
     }
 }
