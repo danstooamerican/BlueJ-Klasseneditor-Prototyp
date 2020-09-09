@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
+<?import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer?>
 <BorderPane fx:id="bdpRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <right>
       <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -32,14 +33,6 @@
       </VBox>
    </right>
    <center>
-      <Pane fx:id="pnlDiagram" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
-         <children>
-            <SubScene fx:id="sbsDiagram" height="200.0" width="200.0">
-              <root>
-                <Region />
-              </root>
-            </SubScene>
-         </children>
-      </Pane>
+      <GraphEditorContainer fx:id="graphEditorContainer" minWidth="0" minHeight="0" maxWidth="+Infinity" maxHeight="+Infinity" VBox.vgrow="ALWAYS"/>
    </center>
 </BorderPane>

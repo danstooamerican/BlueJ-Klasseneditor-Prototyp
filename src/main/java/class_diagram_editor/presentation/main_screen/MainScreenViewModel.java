@@ -1,13 +1,8 @@
 package class_diagram_editor.presentation.main_screen;
 
-import class_diagram_editor.code_generation.CodeElement;
+import class_diagram_editor.diagram.ClassDiagram;
+import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.SourceCodeControl;
-import class_diagram_editor.diagram.model.classdiagram.ClassDiagram;
-import class_diagram_editor.diagram.model.classdiagram.ClassModel;
-import class_diagram_editor.diagram.model.classdiagram.ClassdiagramFactory;
-import class_diagram_editor.diagram.model.classdiagram.ClassdiagramPackage;
-import class_diagram_editor.diagram.model.classdiagram.util.ClassdiagramAdapterFactory;
-import class_diagram_editor.diagram.model.classdiagram.util.ClassdiagramSwitch;
 import de.saxsys.mvvmfx.ViewModel;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
@@ -35,19 +30,11 @@ public class MainScreenViewModel implements ViewModel {
     public void init(EditingDomain domain, GModel graphModel) {
         this.domain = domain;
         this.graphModel = graphModel;
-
-        classDiagram = ClassdiagramFactory.eINSTANCE.createClassDiagram();
+        this.classDiagram = new ClassDiagram();
     }
 
     public void generateCode() {
-        // sourceCodeControl.generate(classDiagram);
-
-
-
-        classDiagram.getClasses().forEach(c -> {
-            System.out.println(c.getName());
-            System.out.println(c.getExtends());
-        });
+        sourceCodeControl.generate(classDiagram);
     }
 
     public void addRandomClass() {
@@ -67,19 +54,24 @@ public class MainScreenViewModel implements ViewModel {
         node.getConnectors().add(input);
         node.getConnectors().add(output);
 
-        ClassModel classModel = ClassdiagramFactory.eINSTANCE.createClassModel();
+        ClassModel classModel = new ClassModel();
         classModel.setName("TestKlasse" + (int) (Math.random() * 100));
-        classModel.setAbstractClass(Math.random() < 0.5);
+        classModel.setAbstract(Math.random() < 0.5);
+
+        String id = classDiagram.addCodeElement(classModel);
+        node.setId(id);
 
         EReference nodes = GraphPackage.Literals.GMODEL__NODES;
-        EReference classes = ClassdiagramPackage.Literals.CLASS_DIAGRAM__CLASSES;
 
         CompoundCommand command= new CompoundCommand();
         command.append(AddCommand.create(domain, graphModel, nodes, node));
-        command.append(AddCommand.create(domain, classDiagram, classes, classModel));
 
         if (command.canExecute()) {
             domain.getCommandStack().execute(command);
         }
+    }
+
+    public void addExtendsRelation(String superClass, String extendsClass) {
+        classDiagram.addExtendsRelation(superClass, extendsClass);
     }
 }

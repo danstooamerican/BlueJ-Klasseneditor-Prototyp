@@ -1,6 +1,6 @@
 package class_diagram_editor.code_generation;
 
-import class_diagram_editor.diagram.model.classdiagram.ClassModel;
+import class_diagram_editor.diagram.ClassModel;
 import lombok.Getter;
 import class_diagram_editor.diagram.code_generation.ClassGenerator;
 

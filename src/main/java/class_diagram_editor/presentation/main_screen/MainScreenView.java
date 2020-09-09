@@ -1,25 +1,17 @@
 package class_diagram_editor.presentation.main_screen;
 
-import class_diagram_editor.diagram.model.classdiagram.ClassDiagram;
-import class_diagram_editor.diagram.model.classdiagram.ClassdiagramPackage;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import de.tesis.dynaware.grapheditor.Commands;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
 import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
-import de.tesis.dynaware.grapheditor.model.GNode;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -41,7 +33,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private Pane pnlDiagram;
 
     @FXML
-    private SubScene sbsDiagram;
+    private GraphEditorContainer graphEditorContainer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,16 +45,29 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             viewModel.addRandomClass();
         });
 
-        sbsDiagram.setWidth(pnlDiagram.getWidth());
-        sbsDiagram.setHeight(pnlDiagram.getHeight());
-        sbsDiagram.heightProperty().bind(pnlDiagram.heightProperty());
-        sbsDiagram.widthProperty().bind(pnlDiagram.widthProperty());
-
         GraphEditor graphEditor = new DefaultGraphEditor();
-        GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
+        graphEditorContainer.setGraphEditor(graphEditor);
 
         graphEditor.setOnConnectionCreated(connection -> {
-            connection.getSource().getParent().getConnectors().add(GraphFactory.eINSTANCE.createGConnector());
+            GConnector connectorInput;
+            GConnector connectorOutput;
+
+            // depends on where the connection originated from
+            if (connection.getSource().getType().contains("input")) {
+                connectorInput = connection.getSource();
+                connectorOutput = connection.getTarget();
+            } else {
+                connectorInput = connection.getTarget();
+                connectorOutput = connection.getSource();
+            }
+
+            String inputId = connectorInput.getParent().getId();
+            String outputId = connectorOutput.getParent().getId();
+
+            viewModel.addExtendsRelation(inputId, outputId);
+
+            // create new connector for super class
+            connectorInput.getParent().getConnectors().add(GraphFactory.eINSTANCE.createGConnector());
             
             return null;
         });
@@ -77,10 +82,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
         viewModel.init(domain, graphModel);
 
-        graphEditorContainer.setGraphEditor(graphEditor);
-
-        graphEditorContainer.panTo(5000, 5000);
-
-        sbsDiagram.setRoot(graphEditorContainer);
+        // graphEditorContainer.panTo(5000, 5000);
     }
 }

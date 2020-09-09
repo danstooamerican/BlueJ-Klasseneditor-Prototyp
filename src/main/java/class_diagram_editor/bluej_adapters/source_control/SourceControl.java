@@ -9,11 +9,12 @@ import bluej.extensions.editor.Editor;
 import bluej.extensions.editor.TextLocation;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.SourceCodeControl;
-import class_diagram_editor.diagram.model.classdiagram.ClassDiagram;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class SourceControl implements SourceCodeControl {
 
@@ -29,10 +30,14 @@ public class SourceControl implements SourceCodeControl {
 
     @Override
     public void generate(ClassDiagram classDiagram) {
+        Iterator<CodeElement> iterator = classDiagram.iterator();
+
         try {
             BPackage bpackage = project.getPackages()[0];
 
-            for (CodeElement codeElement : classDiagram.getClasses()) {
+            while (iterator.hasNext()) {
+                CodeElement codeElement = iterator.next();
+
                 Editor editor = createFile(bpackage, codeElement);
 
                 if (editor != null) {
