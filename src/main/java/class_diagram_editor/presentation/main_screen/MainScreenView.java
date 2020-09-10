@@ -11,7 +11,7 @@ import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -30,10 +30,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private Button btnAddRandomClass;
 
     @FXML
-    private Pane pnlDiagram;
-
-    @FXML
-    private GraphEditorContainer graphEditorContainer;
+    private BorderPane bdpRoot;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,6 +43,8 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         });
 
         GraphEditor graphEditor = new DefaultGraphEditor();
+
+        GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
         graphEditorContainer.setGraphEditor(graphEditor);
 
         graphEditor.setOnConnectionCreated(connection -> {
@@ -83,5 +82,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         viewModel.init(domain, graphModel);
 
         // graphEditorContainer.panTo(5000, 5000);
+
+        bdpRoot.centerProperty().setValue(graphEditorContainer);
     }
 }
