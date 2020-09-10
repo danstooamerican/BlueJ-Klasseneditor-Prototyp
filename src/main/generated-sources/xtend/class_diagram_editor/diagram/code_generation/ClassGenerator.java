@@ -24,8 +24,8 @@ public class ClassGenerator extends Generator<ClassModel> {
       boolean _isExtending = c.isExtending();
       if (_isExtending) {
         _builder.append("extends ");
-        ClassModel _extendsClass = c.getExtendsClass();
-        _builder.append(_extendsClass);
+        String _name_1 = c.getExtendsClass().getName();
+        _builder.append(_name_1);
         _builder.append(" ");
       }
     }
