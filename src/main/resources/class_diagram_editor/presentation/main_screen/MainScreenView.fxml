@@ -25,6 +25,14 @@
                   <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
                </padding>
             </Button>
+            <Button fx:id="btnAddRandomInterface" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Random Interface">
+               <padding>
+                  <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </right>

@@ -1,12 +1,23 @@
 package class_diagram_editor.presentation.main_screen;
 
+import class_diagram_editor.presentation.main_screen.skins.ClassSkin;
+import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
+import class_diagram_editor.presentation.main_screen.skins.ConnectorSkin;
+import class_diagram_editor.presentation.main_screen.skins.ImplementsConnectionSkin;
+import class_diagram_editor.presentation.main_screen.skins.InterfaceSkin;
+import class_diagram_editor.presentation.main_screen.validator.UMLConnectorValidator;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import de.tesis.dynaware.grapheditor.GConnectionSkin;
+import de.tesis.dynaware.grapheditor.GConnectorSkin;
+import de.tesis.dynaware.grapheditor.GNodeSkin;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
 import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
+import de.tesis.dynaware.grapheditor.model.GConnection;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
+import de.tesis.dynaware.grapheditor.model.GNode;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,10 +41,18 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private Button btnAddRandomClass;
 
     @FXML
+    private Button btnAddRandomInterface;
+
+    @FXML
     private BorderPane bdpRoot;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        addControlHandlers();
+        initializeGraph();
+    }
+
+    private void addControlHandlers() {
         btnGenerateCode.setOnAction((e) -> {
             viewModel.generateCode();
         });
@@ -42,35 +61,46 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             viewModel.addRandomClass();
         });
 
+        btnAddRandomInterface.setOnAction((e) -> {
+            viewModel.addRandomInterface();
+        });
+    }
+
+    private void initializeGraph() {
         GraphEditor graphEditor = new DefaultGraphEditor();
 
         GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
         graphEditorContainer.setGraphEditor(graphEditor);
 
-        graphEditor.setOnConnectionCreated(connection -> {
-            GConnector connectorInput;
-            GConnector connectorOutput;
+        addSkins(graphEditor);
+        addGraphControls(graphEditor);
+        addGraphModel(graphEditor);
 
-            // depends on where the connection originated from
-            if (connection.getSource().getType().contains("input")) {
-                connectorInput = connection.getSource();
-                connectorOutput = connection.getTarget();
-            } else {
-                connectorInput = connection.getTarget();
-                connectorOutput = connection.getSource();
-            }
+        bdpRoot.centerProperty().setValue(graphEditorContainer);
+    }
+
+    private void addSkins(GraphEditor graphEditor) {
+        // graphEditor.setNodeSkinFactory(this::createNodeSkin);
+        graphEditor.setConnectorSkinFactory(this::createConnectorSkin);
+        graphEditor.setConnectorValidator(new UMLConnectorValidator());
+        graphEditor.setConnectionSkinFactory(this::createConnectionSkin);
+    }
+
+    private void addGraphControls(GraphEditor graphEditor) {
+        graphEditor.setOnConnectionCreated(connection -> {
+            GConnector connectorInput = connection.getSource();
+            GConnector connectorOutput = connection.getTarget();
 
             String inputId = connectorInput.getParent().getId();
             String outputId = connectorOutput.getParent().getId();
 
             viewModel.addExtendsRelation(inputId, outputId);
 
-            // create new connector for super class
-            connectorInput.getParent().getConnectors().add(GraphFactory.eINSTANCE.createGConnector());
-            
             return null;
         });
+    }
 
+    private void addGraphModel(GraphEditor graphEditor) {
         GModel graphModel = GraphFactory.eINSTANCE.createGModel();
 
         graphModel.setContentWidth(10000);
@@ -80,9 +110,34 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
         viewModel.init(domain, graphModel);
+    }
 
-        // graphEditorContainer.panTo(5000, 5000);
+    private GNodeSkin createNodeSkin(final GNode node)
+    {
+        switch (node.getType()) {
+            case "class":
+                return new ClassSkin(node);
+            case "interface":
+                return new InterfaceSkin(node);
+            default:
+                return new ClassSkin(node);
+        }
+    }
 
-        bdpRoot.centerProperty().setValue(graphEditorContainer);
+    private GConnectorSkin createConnectorSkin(final GConnector connector)
+    {
+        return new ConnectorSkin(connector);
+    }
+
+    private GConnectionSkin createConnectionSkin(final GConnection connection) {
+        final String connectionType = connection.getType();
+
+        if (connectionType.equals(ExtendsConnectionSkin.TYPE)) {
+            return new ExtendsConnectionSkin(connection);
+        } else if (connectionType.equals(ImplementsConnectionSkin.TYPE)) {
+            return new ImplementsConnectionSkin(connection);
+        }
+
+        return null;
     }
 }

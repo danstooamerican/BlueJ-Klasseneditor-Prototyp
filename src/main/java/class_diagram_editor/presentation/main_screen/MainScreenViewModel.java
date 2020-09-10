@@ -39,24 +39,62 @@ public class MainScreenViewModel implements ViewModel {
 
     public void addRandomClass() {
         GNode node = GraphFactory.eINSTANCE.createGNode();
+
         node.setId(UUID.randomUUID().toString());
+        node.setType("class");
+
         node.setX(100);
         node.setY(100);
         node.setWidth(100);
         node.setHeight(100);
 
         GConnector input = GraphFactory.eINSTANCE.createGConnector();
-        GConnector output = GraphFactory.eINSTANCE.createGConnector();
-
-        input.setType("left-input");
-        output.setType("right-output");
-
+        input.setType("top-extends-input");
         node.getConnectors().add(input);
+
+        GConnector output = GraphFactory.eINSTANCE.createGConnector();
+        output.setType("left-extends-output");
         node.getConnectors().add(output);
 
         ClassModel classModel = new ClassModel();
         classModel.setName("TestKlasse" + (int) (Math.random() * 100));
         classModel.setAbstract(Math.random() < 0.5);
+
+        String id = classDiagram.addCodeElement(classModel);
+        node.setId(id);
+
+        EReference nodes = GraphPackage.Literals.GMODEL__NODES;
+
+        CompoundCommand command= new CompoundCommand();
+        command.append(AddCommand.create(domain, graphModel, nodes, node));
+
+        if (command.canExecute()) {
+            domain.getCommandStack().execute(command);
+        }
+    }
+
+    public void addRandomInterface() {
+        GNode node = GraphFactory.eINSTANCE.createGNode();
+
+        node.setId(UUID.randomUUID().toString());
+        node.setType("interface");
+
+        node.setX(100);
+        node.setY(100);
+        node.setWidth(100);
+        node.setHeight(100);
+
+        GConnector input = GraphFactory.eINSTANCE.createGConnector();
+        input.setType("top-extends-input");
+        node.getConnectors().add(input);
+
+        GConnector output = GraphFactory.eINSTANCE.createGConnector();
+        output.setType("left-extends-output");
+        node.getConnectors().add(output);
+
+        ClassModel classModel = new ClassModel();
+        classModel.setName("TestInterface" + (int) (Math.random() * 100));
+        classModel.setAbstract(false);
 
         String id = classDiagram.addCodeElement(classModel);
         node.setId(id);

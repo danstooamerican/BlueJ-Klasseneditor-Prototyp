@@ -40,7 +40,10 @@ public class ClassEditorApplication extends Application implements Runnable {
 
         Parent root = viewTuple.getView();
 
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("skins.css").toExternalForm());
+
+        stage.setScene(scene);
         stage.show();
     }
 
