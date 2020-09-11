@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
 
 public class InterfaceSkin extends DefaultNodeSkin {
 
+    private static final String SEPARATOR_CLASS = "diagram-separator";
+
     private final InterfaceModel interfaceModel;
 
     public InterfaceSkin(final GNode node, InterfaceModel interfaceModel) {
@@ -28,6 +30,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
         Node methods = getMethods();
 
         Separator methodsSeparator = new Separator();
+        methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
 
         layout.getChildren().addAll(header, methodsSeparator, methods);
 
