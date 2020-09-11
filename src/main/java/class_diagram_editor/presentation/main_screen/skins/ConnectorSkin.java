@@ -16,7 +16,7 @@ public class ConnectorSkin extends GConnectorSkin {
     private static final PseudoClass PSEUDO_CLASS_ALLOWED = PseudoClass.getPseudoClass("allowed");
     private static final PseudoClass PSEUDO_CLASS_FORBIDDEN = PseudoClass.getPseudoClass("forbidden");
 
-    public static final double RADIUS = 6;
+    public static final double RADIUS = 4;
 
     private final Pane root = new Pane();
     private final Circle circle = new Circle(RADIUS);
