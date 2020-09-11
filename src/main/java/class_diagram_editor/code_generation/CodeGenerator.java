@@ -1,6 +1,7 @@
 package class_diagram_editor.code_generation;
 
 import class_diagram_editor.diagram.ClassModel;
+import class_diagram_editor.diagram.InterfaceModel;
 import lombok.Getter;
 import class_diagram_editor.diagram.code_generation.ClassGenerator;
 
@@ -13,10 +14,14 @@ public class CodeGenerator {
         lastGeneratedCode = code;
     }
 
-    public void visitClass(ClassModel c) {
-        ClassGenerator classModel = new ClassGenerator();
+    public void visitClass(ClassModel classModel) {
+        ClassGenerator classGenerator = new ClassGenerator();
 
-        generate(classModel.generate(c));
+        generate(classGenerator.generate(classModel));
+    }
+
+    public void visitInterface(InterfaceModel interfaceModel) {
+
     }
 
 }

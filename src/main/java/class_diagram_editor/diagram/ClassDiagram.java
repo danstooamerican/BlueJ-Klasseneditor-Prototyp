@@ -13,19 +13,33 @@ import java.util.UUID;
 public class ClassDiagram {
 
     private final Map<String, ClassModel> classes;
+    private final Map<String, InterfaceModel> interfaces;
 
     public ClassDiagram() {
         this.classes = new HashMap<>();
+        this.interfaces = new HashMap<>();
     }
 
     public ClassModel getClassModel(String id) {
         return classes.get(id);
     }
 
-    public String addCodeElement(ClassModel codeElement) {
+    public InterfaceModel getInterfaceModel(String id) {
+        return interfaces.get(id);
+    }
+
+    public String addClass(ClassModel classModel) {
         String uuid = UUID.randomUUID().toString();
 
-        classes.put(uuid, codeElement);
+        classes.put(uuid, classModel);
+
+        return uuid;
+    }
+
+    public String addInterface(InterfaceModel interfaceModel) {
+        String uuid = UUID.randomUUID().toString();
+
+        interfaces.put(uuid, interfaceModel);
 
         return uuid;
     }
@@ -40,7 +54,10 @@ public class ClassDiagram {
     }
 
     public Iterator<CodeElement> iterator() {
-        Collection<CodeElement> codeElements = new ArrayList<>(classes.values());
+        Collection<CodeElement> codeElements = new ArrayList<>();
+
+        codeElements.addAll(classes.values());
+        codeElements.addAll(interfaces.values());
 
         return new ClassModelIterator(codeElements);
     }
