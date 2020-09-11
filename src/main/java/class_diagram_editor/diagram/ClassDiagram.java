@@ -18,6 +18,10 @@ public class ClassDiagram {
         this.classes = new HashMap<>();
     }
 
+    public ClassModel getClassModel(String id) {
+        return classes.get(id);
+    }
+
     public String addCodeElement(ClassModel codeElement) {
         String uuid = UUID.randomUUID().toString();
 

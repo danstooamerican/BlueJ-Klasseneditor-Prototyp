@@ -3,7 +3,16 @@ package class_diagram_editor.presentation.main_screen;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.SourceCodeControl;
+import class_diagram_editor.presentation.main_screen.skins.ClassSkin;
+import class_diagram_editor.presentation.main_screen.skins.ConnectorSkin;
+import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
+import class_diagram_editor.presentation.main_screen.skins.ImplementsConnectionSkin;
+import class_diagram_editor.presentation.main_screen.skins.InterfaceSkin;
 import de.saxsys.mvvmfx.ViewModel;
+import de.tesis.dynaware.grapheditor.GConnectionSkin;
+import de.tesis.dynaware.grapheditor.GConnectorSkin;
+import de.tesis.dynaware.grapheditor.GNodeSkin;
+import de.tesis.dynaware.grapheditor.model.GConnection;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GNode;
@@ -111,5 +120,34 @@ public class MainScreenViewModel implements ViewModel {
 
     public void addExtendsRelation(String superClass, String extendsClass) {
         classDiagram.addExtendsRelation(superClass, extendsClass);
+    }
+
+    public GNodeSkin createNodeSkin(final GNode node)
+    {
+        switch (node.getType()) {
+            case "class":
+                return new ClassSkin(node, classDiagram.getClassModel(node.getId()));
+            case "interface":
+                return new InterfaceSkin(node);
+            default:
+                return new ClassSkin(node, classDiagram.getClassModel(node.getId()));
+        }
+    }
+
+    public GConnectorSkin createConnectorSkin(final GConnector connector)
+    {
+        return new ConnectorSkin(connector);
+    }
+
+    public GConnectionSkin createConnectionSkin(final GConnection connection) {
+        final String connectionType = connection.getType();
+
+        if (connectionType.equals(ExtendsConnectionSkin.TYPE)) {
+            return new ExtendsConnectionSkin(connection);
+        } else if (connectionType.equals(ImplementsConnectionSkin.TYPE)) {
+            return new ImplementsConnectionSkin(connection);
+        }
+
+        return null;
     }
 }

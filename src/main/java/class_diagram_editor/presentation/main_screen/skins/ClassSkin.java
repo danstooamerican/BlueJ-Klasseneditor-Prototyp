@@ -1,35 +1,85 @@
 package class_diagram_editor.presentation.main_screen.skins;
 
-import de.tesis.dynaware.grapheditor.GConnectorSkin;
-import de.tesis.dynaware.grapheditor.GNodeSkin;
+import class_diagram_editor.diagram.ClassModel;
+import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
-import javafx.geometry.Point2D;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.VBox;
 
-import java.util.List;
+/**
+ * Node skin for a 'tree-like' graph.
+ */
+public class ClassSkin extends DefaultNodeSkin {
 
-public class ClassSkin extends GNodeSkin {
+    private final ClassModel classModel;
 
-    public ClassSkin(GNode node) {
+    public ClassSkin(final GNode node, ClassModel classModel) {
         super(node);
+
+        this.classModel = classModel;
+
+        VBox layout = new VBox();
+        layout.setAlignment(Pos.TOP_CENTER);
+
+        Node header = getHeader();
+        Node attributes = getAttributes();
+        Node methods = getMethods();
+
+        Separator attributesSeparator = new Separator();
+        Separator methodsSeparator = new Separator();
+
+        layout.getChildren().addAll(header, attributesSeparator, attributes, methodsSeparator, methods);
+
+        getRoot().getChildren().add(layout);
     }
 
-    @Override
-    public void setConnectorSkins(List<GConnectorSkin> connectorSkins) {
+    private Node getHeader() {
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(6, 8, 6, 8));
+        layout.setAlignment(Pos.TOP_CENTER);
 
+        if (classModel.isAbstract()) {
+            layout.getChildren().add(new Label("<<abstract>>"));
+        }
+
+        layout.getChildren().add(new Label(classModel.getName()));
+
+        return layout;
     }
 
-    @Override
-    public void layoutConnectors() {
+    private Node getAttributes() {
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(6, 8, 6, 8));
+        layout.setAlignment(Pos.TOP_LEFT);
 
+        if (Math.random() < 0.5) {
+            layout.getChildren().add(new Label("- name : String"));
+        }
+
+        if (layout.getChildren().isEmpty()) {
+            return new VBox();
+        }
+
+        return layout;
     }
 
-    @Override
-    public Point2D getConnectorPosition(GConnectorSkin connectorSkin) {
-        return null;
-    }
+    private Node getMethods() {
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(6, 8, 6, 8));
+        layout.setAlignment(Pos.TOP_LEFT);
 
-    @Override
-    protected void selectionChanged(boolean isSelected) {
+        if (Math.random() < 0.5) {
+            layout.getChildren().add(new Label("+ getName : String"));
+        }
 
+        if (layout.getChildren().isEmpty()) {
+            return new VBox();
+        }
+
+        return layout;
     }
 }

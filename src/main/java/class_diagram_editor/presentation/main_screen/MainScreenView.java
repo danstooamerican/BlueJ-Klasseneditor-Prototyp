@@ -80,10 +80,10 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     }
 
     private void addSkins(GraphEditor graphEditor) {
-        // graphEditor.setNodeSkinFactory(this::createNodeSkin);
-        graphEditor.setConnectorSkinFactory(this::createConnectorSkin);
+        graphEditor.setNodeSkinFactory(viewModel::createNodeSkin);
+        graphEditor.setConnectorSkinFactory(viewModel::createConnectorSkin);
         graphEditor.setConnectorValidator(new UMLConnectorValidator());
-        graphEditor.setConnectionSkinFactory(this::createConnectionSkin);
+        graphEditor.setConnectionSkinFactory(viewModel::createConnectionSkin);
     }
 
     private void addGraphControls(GraphEditor graphEditor) {
@@ -110,34 +110,5 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
         viewModel.init(domain, graphModel);
-    }
-
-    private GNodeSkin createNodeSkin(final GNode node)
-    {
-        switch (node.getType()) {
-            case "class":
-                return new ClassSkin(node);
-            case "interface":
-                return new InterfaceSkin(node);
-            default:
-                return new ClassSkin(node);
-        }
-    }
-
-    private GConnectorSkin createConnectorSkin(final GConnector connector)
-    {
-        return new ConnectorSkin(connector);
-    }
-
-    private GConnectionSkin createConnectionSkin(final GConnection connection) {
-        final String connectionType = connection.getType();
-
-        if (connectionType.equals(ExtendsConnectionSkin.TYPE)) {
-            return new ExtendsConnectionSkin(connection);
-        } else if (connectionType.equals(ImplementsConnectionSkin.TYPE)) {
-            return new ImplementsConnectionSkin(connection);
-        }
-
-        return null;
     }
 }
