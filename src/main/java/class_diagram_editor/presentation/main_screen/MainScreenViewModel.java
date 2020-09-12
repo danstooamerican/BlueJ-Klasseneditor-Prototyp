@@ -1,9 +1,12 @@
 package class_diagram_editor.presentation.main_screen;
 
+import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.InterfaceModel;
+import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.SourceCodeControl;
+import class_diagram_editor.diagram.Visibility;
 import class_diagram_editor.presentation.main_screen.skins.ClassSkin;
 import class_diagram_editor.presentation.main_screen.skins.ConnectorSkin;
 import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
@@ -50,6 +53,28 @@ public class MainScreenViewModel implements ViewModel {
         ClassModel classModel = new ClassModel();
         classModel.setName("TestKlasse" + (int) (Math.random() * 100));
         classModel.setAbstract(Math.random() < 0.5);
+
+        for (int i = 0; i < 5 && Math.random() < 0.5; i++) {
+            AttributeModel attributeModel = new AttributeModel();
+            attributeModel.setName("testVariable" + i);
+            attributeModel.setType("String");
+            attributeModel.setFinal(Math.random() < 0.5);
+            attributeModel.setStatic(Math.random() < 0.5);
+            attributeModel.setVisibility(Visibility.PRIVATE);
+
+            classModel.getAttributes().add(attributeModel);
+        }
+
+        for (int i = 0; i < 5 && Math.random() < 0.5; i++) {
+            MethodModel methodModel = new MethodModel();
+            methodModel.setName("testMethod" + i);
+            methodModel.setReturnType("String");
+            methodModel.setAbstract(Math.random() < 0.5);
+            methodModel.setStatic(Math.random() < 0.5);
+            methodModel.setVisibility(Visibility.PUBLIC);
+
+            classModel.getMethods().add(methodModel);
+        }
 
         String id = classDiagram.addClass(classModel);
 

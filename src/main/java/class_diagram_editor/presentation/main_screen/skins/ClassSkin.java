@@ -1,6 +1,8 @@
 package class_diagram_editor.presentation.main_screen.skins;
 
 import class_diagram_editor.diagram.ClassModel;
+import class_diagram_editor.diagram.MethodModel;
+import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import javafx.geometry.Insets;
@@ -16,6 +18,8 @@ import javafx.scene.layout.VBox;
 public class ClassSkin extends DefaultNodeSkin {
 
     private static final String SEPARATOR_CLASS = "diagram-separator";
+    private static final String ABSTRACT_CLASS = "abstract";
+    private static final String STATIC_CLASS = "static";
 
     private final ClassModel classModel;
 
@@ -47,11 +51,14 @@ public class ClassSkin extends DefaultNodeSkin {
         layout.setPadding(new Insets(6, 8, 6, 8));
         layout.setAlignment(Pos.TOP_CENTER);
 
+        Label lblName = new Label(classModel.getName());
+
         if (classModel.isAbstract()) {
             layout.getChildren().add(new Label("<<abstract>>"));
+            lblName.getStyleClass().add(ABSTRACT_CLASS);
         }
 
-        layout.getChildren().add(new Label(classModel.getName()));
+        layout.getChildren().add(lblName);
 
         return layout;
     }
@@ -74,15 +81,26 @@ public class ClassSkin extends DefaultNodeSkin {
 
     private Node getMethods() {
         VBox layout = new VBox();
-        layout.setPadding(new Insets(6, 8, 6, 8));
-        layout.setAlignment(Pos.TOP_LEFT);
 
-        if (Math.random() < 0.5) {
-            layout.getChildren().add(new Label("+ getName : String"));
-        }
+        if (classModel.hasMethods()) {
+            UMLMethodGenerator methodGenerator = new UMLMethodGenerator();
 
-        if (layout.getChildren().isEmpty()) {
-            return new VBox();
+            layout.setPadding(new Insets(6, 8, 6, 8));
+            layout.setAlignment(Pos.TOP_LEFT);
+
+            for (MethodModel method : classModel.getMethods()) {
+                final String methodEntry = methodGenerator.generate(method).trim();
+
+                Label lblMethod = new Label(methodEntry);
+
+                if (method.isAbstract()) {
+                    lblMethod.getStyleClass().add(ABSTRACT_CLASS);
+                } else if (method.isStatic()) {
+                    lblMethod.getStyleClass().add(STATIC_CLASS);
+                }
+
+                layout.getChildren().add(lblMethod);
+            }
         }
 
         return layout;

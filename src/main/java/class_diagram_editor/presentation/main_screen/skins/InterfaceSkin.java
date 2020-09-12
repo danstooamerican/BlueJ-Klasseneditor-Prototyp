@@ -3,6 +3,7 @@ package class_diagram_editor.presentation.main_screen.skins;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
+import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import javafx.geometry.Insets;
@@ -53,34 +54,15 @@ public class InterfaceSkin extends DefaultNodeSkin {
         VBox layout = new VBox();
 
         if (interfaceModel.hasMethods()) {
+            UMLMethodGenerator methodGenerator = new UMLMethodGenerator();
+
             layout.setPadding(new Insets(6, 8, 6, 8));
             layout.setAlignment(Pos.TOP_LEFT);
 
-            StringBuilder stringBuilder = new StringBuilder();
             for (MethodModel method : interfaceModel.getMethods()) {
-                stringBuilder.append("+")
-                        .append(method.getName())
-                        .append("(");
+                final String methodEntry = methodGenerator.generate(method);
 
-                if (method.hasAttributes()) {
-                    final String delimiter = ", ";
-
-                    for (AttributeModel attribute : method.getAttributes()) {
-                        stringBuilder.append(attribute.getName())
-                                .append(" : ")
-                                .append(attribute.getType())
-                                .append(delimiter);
-                    }
-
-                    stringBuilder.setLength(stringBuilder.length() - delimiter.length());
-                }
-
-                stringBuilder.append(") : ")
-                        .append(method.getReturnType());
-
-                layout.getChildren().add(new Label(stringBuilder.toString()));
-
-                stringBuilder.setLength(0);
+                layout.getChildren().add(new Label(methodEntry));
             }
         }
 
