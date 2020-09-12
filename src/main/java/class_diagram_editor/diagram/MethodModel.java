@@ -47,4 +47,8 @@ public class MethodModel {
     public boolean isAbstract() {
         return isAbstract;
     }
+
+    public void addAttribute(AttributeModel attributeModel) {
+        attributes.add(attributeModel);
+    }
 }

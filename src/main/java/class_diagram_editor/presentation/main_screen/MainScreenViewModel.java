@@ -55,25 +55,11 @@ public class MainScreenViewModel implements ViewModel {
         classModel.setAbstract(Math.random() < 0.5);
 
         for (int i = 0; i < 5 && Math.random() < 0.5; i++) {
-            AttributeModel attributeModel = new AttributeModel();
-            attributeModel.setName("testVariable" + i);
-            attributeModel.setType("String");
-            attributeModel.setFinal(Math.random() < 0.5);
-            attributeModel.setStatic(Math.random() < 0.5);
-            attributeModel.setVisibility(Visibility.PRIVATE);
-
-            classModel.getAttributes().add(attributeModel);
+            classModel.addAttribute(createRandomAttribute(i));
         }
 
         for (int i = 0; i < 5 && Math.random() < 0.5; i++) {
-            MethodModel methodModel = new MethodModel();
-            methodModel.setName("testMethod" + i);
-            methodModel.setReturnType("String");
-            methodModel.setAbstract(Math.random() < 0.5);
-            methodModel.setStatic(Math.random() < 0.5);
-            methodModel.setVisibility(Visibility.PUBLIC);
-
-            classModel.getMethods().add(methodModel);
+            classModel.addMethod(createRandomMethod(i));
         }
 
         String id = classDiagram.addClass(classModel);
@@ -81,9 +67,39 @@ public class MainScreenViewModel implements ViewModel {
         addNode("class", id);
     }
 
+    private MethodModel createRandomMethod(int i) {
+        MethodModel methodModel = new MethodModel();
+        methodModel.setName("testMethod" + i);
+        methodModel.setReturnType("String");
+        methodModel.setAbstract(Math.random() < 0.5);
+        methodModel.setStatic(Math.random() < 0.5);
+        methodModel.setVisibility(Visibility.PUBLIC);
+
+        for (int k = 0; k < 5 && Math.random() < 0.5; k++) {
+            methodModel.addAttribute(createRandomAttribute(k));
+        }
+
+        return methodModel;
+    }
+
+    private AttributeModel createRandomAttribute(int i) {
+        AttributeModel attributeModel = new AttributeModel();
+        attributeModel.setName("testVariable" + i);
+        attributeModel.setType("String");
+        attributeModel.setFinal(Math.random() < 0.5);
+        attributeModel.setStatic(Math.random() < 0.5);
+        attributeModel.setVisibility(Visibility.PRIVATE);
+
+        return attributeModel;
+    }
+
     public void addRandomInterface() {
         InterfaceModel interfaceModel = new InterfaceModel();
         interfaceModel.setName("TestInterface" + (int) (Math.random() * 100));
+
+        for (int i = 0; i < 5 && Math.random() < 0.5; i++) {
+            interfaceModel.addMethod(createRandomMethod(i));
+        }
 
         String id = classDiagram.addInterface(interfaceModel);
 

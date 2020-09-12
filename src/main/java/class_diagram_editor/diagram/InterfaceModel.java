@@ -28,4 +28,8 @@ public class InterfaceModel implements CodeElement {
     public boolean hasMethods() {
         return !methods.isEmpty();
     }
+
+    public void addMethod(MethodModel methodModel) {
+        methods.add(methodModel);
+    }
 }

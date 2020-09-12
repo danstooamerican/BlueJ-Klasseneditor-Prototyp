@@ -70,4 +70,12 @@ public class ClassModel implements CodeElement {
     public List<MethodModel> getMethods() {
         return methods;
     }
+
+    public void addMethod(MethodModel methodModel) {
+        methods.add(methodModel);
+    }
+
+    public void addAttribute(AttributeModel attributeModel) {
+        attributes.add(attributeModel);
+    }
 }
