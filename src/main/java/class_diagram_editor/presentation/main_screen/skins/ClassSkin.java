@@ -1,7 +1,9 @@
 package class_diagram_editor.presentation.main_screen.skins;
 
+import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.MethodModel;
+import class_diagram_editor.presentation.main_screen.skins.generators.UMLAttributeGenerator;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
@@ -65,15 +67,24 @@ public class ClassSkin extends DefaultNodeSkin {
 
     private Node getAttributes() {
         VBox layout = new VBox();
-        layout.setPadding(new Insets(6, 8, 6, 8));
-        layout.setAlignment(Pos.TOP_LEFT);
 
-        if (Math.random() < 0.5) {
-            layout.getChildren().add(new Label("- name : String"));
-        }
+        if (classModel.hasAttributes()) {
+            UMLAttributeGenerator attributeGenerator = new UMLAttributeGenerator();
 
-        if (layout.getChildren().isEmpty()) {
-            return new VBox();
+            layout.setPadding(new Insets(6, 8, 6, 8));
+            layout.setAlignment(Pos.TOP_LEFT);
+
+            for (AttributeModel attributeModel : classModel.getAttributes()) {
+                final String attributeEntry = attributeGenerator.generate(attributeModel).trim();
+
+                Label lblAttribute = new Label(attributeEntry);
+
+                if (attributeModel.isStatic()) {
+                    lblAttribute.getStyleClass().add(STATIC_CLASS);
+                }
+
+                layout.getChildren().add(lblAttribute);
+            }
         }
 
         return layout;
