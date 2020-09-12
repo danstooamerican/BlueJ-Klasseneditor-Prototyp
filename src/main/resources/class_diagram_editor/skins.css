@@ -52,3 +52,11 @@
     -fx-border-style: solid;
     -fx-border-width: 1px;
 }
+
+.abstract {
+    -fx-font-style: italic;
+}
+
+.static {
+    -fx-underline: true;
+}

@@ -11,12 +11,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Setter
-@Getter
 public class ClassModel implements CodeElement {
 
     private String name;
 
-    @Getter(AccessLevel.NONE)
     private boolean isAbstract;
 
     private ClassModel extendsClass;
@@ -44,4 +42,32 @@ public class ClassModel implements CodeElement {
         return extendsClass != null;
     }
 
+    public boolean hasMethods() {
+        return !methods.isEmpty();
+    }
+
+    public boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public ClassModel getExtendsClass() {
+        return extendsClass;
+    }
+
+    public Collection<InterfaceModel> getImplementsInterfaces() {
+        return implementsInterfaces;
+    }
+
+    public List<AttributeModel> getAttributes() {
+        return attributes;
+    }
+
+    public List<MethodModel> getMethods() {
+        return methods;
+    }
 }

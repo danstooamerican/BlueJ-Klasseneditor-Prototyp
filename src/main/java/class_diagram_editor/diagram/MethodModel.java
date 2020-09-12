@@ -1,17 +1,18 @@
 package class_diagram_editor.diagram;
 
-import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Setter
 public class MethodModel {
 
     private String name;
     private String returnType;
+    private Visibility visibility;
+    private boolean isStatic;
+    private boolean isAbstract;
 
     private List<AttributeModel> attributes;
 
@@ -19,7 +20,31 @@ public class MethodModel {
         this.attributes = new ArrayList<>();
     }
 
-    public boolean hasAttributes() {
-        return !attributes.isEmpty();
+    public String getName() {
+        return name;
+    }
+
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public List<AttributeModel> getAttributes() {
+        return attributes;
+    }
+
+    public MethodModel(Visibility visibility) {
+        this.visibility = visibility;
+    }
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    public boolean isAbstract() {
+        return isAbstract;
     }
 }
