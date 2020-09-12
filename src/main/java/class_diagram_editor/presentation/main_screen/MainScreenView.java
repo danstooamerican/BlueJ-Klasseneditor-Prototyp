@@ -94,7 +94,14 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             String inputId = connectorInput.getParent().getId();
             String outputId = connectorOutput.getParent().getId();
 
-            viewModel.addExtendsRelation(inputId, outputId);
+            switch (connection.getType()) {
+                case ExtendsConnectionSkin.TYPE:
+                    viewModel.addExtendsRelation(inputId, outputId);
+                    break;
+                case ImplementsConnectionSkin.TYPE:
+                    viewModel.addImplementsRelation(inputId, outputId);
+                    break;
+            }
 
             return null;
         });

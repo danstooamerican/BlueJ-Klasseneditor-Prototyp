@@ -53,6 +53,15 @@ public class ClassDiagram {
         }
     }
 
+    public void addImplementsRelation(String interfaceId, String classId) {
+        if (classes.containsKey(classId) && interfaces.containsKey(interfaceId)) {
+            InterfaceModel interfaceModel = interfaces.get(interfaceId);
+            ClassModel classModel = classes.get(classId);
+
+            classModel.addInterface(interfaceModel);
+        }
+    }
+
     public Iterator<CodeElement> iterator() {
         Collection<CodeElement> codeElements = new ArrayList<>();
 

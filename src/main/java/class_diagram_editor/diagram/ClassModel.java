@@ -2,8 +2,6 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -77,5 +75,9 @@ public class ClassModel implements CodeElement {
 
     public void addAttribute(AttributeModel attributeModel) {
         attributes.add(attributeModel);
+    }
+
+    public void addInterface(InterfaceModel interfaceModel) {
+        implementsInterfaces.add(interfaceModel);
     }
 }

@@ -154,8 +154,11 @@ public class MainScreenViewModel implements ViewModel {
         classDiagram.addExtendsRelation(superClass, extendsClass);
     }
 
-    public GNodeSkin createNodeSkin(final GNode node)
-    {
+    public void addImplementsRelation(String interfaceId, String classId) {
+        classDiagram.addImplementsRelation(interfaceId, classId);
+    }
+
+    public GNodeSkin createNodeSkin(final GNode node) {
         switch (node.getType()) {
             case "class":
                 return new ClassSkin(node, classDiagram.getClassModel(node.getId()));
@@ -166,8 +169,7 @@ public class MainScreenViewModel implements ViewModel {
         }
     }
 
-    public GConnectorSkin createConnectorSkin(final GConnector connector)
-    {
+    public GConnectorSkin createConnectorSkin(final GConnector connector) {
         return new ConnectorSkin(connector);
     }
 
