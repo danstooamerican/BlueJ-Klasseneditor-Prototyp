@@ -1,23 +1,15 @@
 package class_diagram_editor.presentation.main_screen;
 
-import class_diagram_editor.presentation.main_screen.skins.ClassSkin;
 import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
-import class_diagram_editor.presentation.main_screen.skins.ConnectorSkin;
 import class_diagram_editor.presentation.main_screen.skins.ImplementsConnectionSkin;
-import class_diagram_editor.presentation.main_screen.skins.InterfaceSkin;
 import class_diagram_editor.presentation.main_screen.validator.UMLConnectorValidator;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import de.tesis.dynaware.grapheditor.GConnectionSkin;
-import de.tesis.dynaware.grapheditor.GConnectorSkin;
-import de.tesis.dynaware.grapheditor.GNodeSkin;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
 import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
-import de.tesis.dynaware.grapheditor.model.GConnection;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
-import de.tesis.dynaware.grapheditor.model.GNode;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

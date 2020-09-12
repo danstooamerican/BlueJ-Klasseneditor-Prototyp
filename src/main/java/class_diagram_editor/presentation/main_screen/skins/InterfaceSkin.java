@@ -1,6 +1,5 @@
 package class_diagram_editor.presentation.main_screen.skins;
 
-import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
