@@ -7,6 +7,7 @@ import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.SourceCodeControl;
 import class_diagram_editor.diagram.Visibility;
+import class_diagram_editor.presentation.main_screen.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.main_screen.skins.ClassSkin;
 import class_diagram_editor.presentation.main_screen.skins.ConnectorSkin;
 import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
@@ -150,12 +151,16 @@ public class MainScreenViewModel implements ViewModel {
         return connector;
     }
 
-    public void addExtendsRelation(String superClass, String extendsClass) {
-        classDiagram.addExtendsRelation(superClass, extendsClass);
+    public void addExtendsRelation(String superClassId, String classId) {
+        classDiagram.addExtendsRelation(superClassId, classId);
     }
 
     public void addImplementsRelation(String interfaceId, String classId) {
         classDiagram.addImplementsRelation(interfaceId, classId);
+    }
+
+    public void addAssociationRelation(String startId, String endId) {
+        classDiagram.addAssociationRelation(startId, endId);
     }
 
     public GNodeSkin createNodeSkin(final GNode node) {
@@ -176,10 +181,13 @@ public class MainScreenViewModel implements ViewModel {
     public GConnectionSkin createConnectionSkin(final GConnection connection) {
         final String connectionType = connection.getType();
 
-        if (connectionType.equals(ExtendsConnectionSkin.TYPE)) {
-            return new ExtendsConnectionSkin(connection);
-        } else if (connectionType.equals(ImplementsConnectionSkin.TYPE)) {
-            return new ImplementsConnectionSkin(connection);
+        switch (connectionType) {
+            case ExtendsConnectionSkin.TYPE:
+                return new ExtendsConnectionSkin(connection);
+            case ImplementsConnectionSkin.TYPE:
+                return new ImplementsConnectionSkin(connection);
+            case AssociationConnectionSkin.TYPE:
+                return new AssociationConnectionSkin(connection);
         }
 
         return null;

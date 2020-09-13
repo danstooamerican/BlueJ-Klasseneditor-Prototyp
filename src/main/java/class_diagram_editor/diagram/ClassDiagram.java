@@ -62,6 +62,10 @@ public class ClassDiagram {
         }
     }
 
+    public void addAssociationRelation(String startId, String endId) {
+        // TODO: implement me. Code generation unclear
+    }
+
     public Iterator<CodeElement> iterator() {
         Collection<CodeElement> codeElements = new ArrayList<>();
 

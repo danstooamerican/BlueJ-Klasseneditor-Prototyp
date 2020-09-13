@@ -20,6 +20,17 @@
     -fx-fill: tomato;
 }
 
+.association-connection .arrow-line {
+    -fx-stroke: darkslategrey;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.association-connection .arrow-head {
+    -fx-stroke: darkslategrey;
+    -fx-fill: transparent;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
 .extends-connection .arrow-line {
     -fx-stroke: darkslategrey;
     -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);

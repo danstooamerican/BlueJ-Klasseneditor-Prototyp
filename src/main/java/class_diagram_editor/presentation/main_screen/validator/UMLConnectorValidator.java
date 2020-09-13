@@ -1,11 +1,22 @@
 package class_diagram_editor.presentation.main_screen.validator;
 
+import class_diagram_editor.presentation.main_screen.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
 import class_diagram_editor.presentation.main_screen.skins.ImplementsConnectionSkin;
 import de.tesis.dynaware.grapheditor.GConnectorValidator;
 import de.tesis.dynaware.grapheditor.model.GConnector;
+import javafx.beans.property.BooleanProperty;
 
 public class UMLConnectorValidator implements GConnectorValidator {
+
+    private boolean drawAssociation;
+
+    public UMLConnectorValidator(BooleanProperty drawAssociation) {
+        drawAssociation.addListener((observable, oldValue, newValue) -> {
+            this.drawAssociation = newValue;
+        });
+    }
+
     @Override
     public boolean prevalidate(GConnector source, GConnector target) {
         if (source == null || target == null) {
@@ -22,6 +33,10 @@ public class UMLConnectorValidator implements GConnectorValidator {
 
     @Override
     public String createConnectionType(GConnector source, GConnector target) {
+        if (drawAssociation) {
+            return AssociationConnectionSkin.TYPE;
+        }
+
         final String sourceType = source.getParent().getType();
         final String targetType = target.getParent().getType();
 
@@ -33,7 +48,7 @@ public class UMLConnectorValidator implements GConnectorValidator {
             return ImplementsConnectionSkin.TYPE;
         }
 
-        return "other-connection";
+        return "default-connection";
     }
 
     @Override

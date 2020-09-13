@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.main_screen;
 
+import class_diagram_editor.presentation.main_screen.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.main_screen.skins.ExtendsConnectionSkin;
 import class_diagram_editor.presentation.main_screen.skins.ImplementsConnectionSkin;
 import class_diagram_editor.presentation.main_screen.validator.UMLConnectorValidator;
@@ -11,9 +12,12 @@ import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -36,25 +40,36 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private Button btnAddRandomInterface;
 
     @FXML
+    private CheckBox ckbAssociation;
+
+    @FXML
     private BorderPane bdpRoot;
+
+    private BooleanProperty drawAssociation;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.drawAssociation = new SimpleBooleanProperty();
+
         addControlHandlers();
         initializeGraph();
     }
 
     private void addControlHandlers() {
-        btnGenerateCode.setOnAction((e) -> {
+        btnGenerateCode.setOnAction(e -> {
             viewModel.generateCode();
         });
 
-        btnAddRandomClass.setOnAction((e) -> {
+        btnAddRandomClass.setOnAction(e -> {
             viewModel.addRandomClass();
         });
 
-        btnAddRandomInterface.setOnAction((e) -> {
+        btnAddRandomInterface.setOnAction(e -> {
             viewModel.addRandomInterface();
+        });
+
+        ckbAssociation.setOnAction(e -> {
+            drawAssociation.set(ckbAssociation.isSelected());
         });
     }
 
@@ -74,7 +89,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private void addSkins(GraphEditor graphEditor) {
         graphEditor.setNodeSkinFactory(viewModel::createNodeSkin);
         graphEditor.setConnectorSkinFactory(viewModel::createConnectorSkin);
-        graphEditor.setConnectorValidator(new UMLConnectorValidator());
+        graphEditor.setConnectorValidator(new UMLConnectorValidator(drawAssociation));
         graphEditor.setConnectionSkinFactory(viewModel::createConnectionSkin);
     }
 
@@ -92,6 +107,9 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
                     break;
                 case ImplementsConnectionSkin.TYPE:
                     viewModel.addImplementsRelation(inputId, outputId);
+                    break;
+                case AssociationConnectionSkin.TYPE:
+                    viewModel.addAssociationRelation(inputId, outputId);
                     break;
             }
 
