@@ -105,6 +105,8 @@ public class MainScreenViewModel implements ViewModel {
         String id = classDiagram.addInterface(interfaceModel);
 
         addNode("interface", id);
+
+        classDiagram.updateRandom();
     }
 
     private void addNode(String type, String id) {

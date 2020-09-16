@@ -2,6 +2,8 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 @Setter
 public class ClassModel implements CodeElement {
 
-    private String name;
+    private StringProperty name = new SimpleStringProperty();
 
     private boolean isAbstract;
 
@@ -48,9 +50,17 @@ public class ClassModel implements CodeElement {
         return !attributes.isEmpty();
     }
 
+    public void setName(String name) {
+        this.name.setValue(name);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
     @Override
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public ClassModel getExtendsClass() {
