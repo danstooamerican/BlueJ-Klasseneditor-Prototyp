@@ -95,21 +95,21 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
     private void addGraphControls(GraphEditor graphEditor) {
         graphEditor.setOnConnectionCreated(connection -> {
-            GConnector connectorInput = connection.getSource();
-            GConnector connectorOutput = connection.getTarget();
+            GConnector connectorSource = connection.getSource();
+            GConnector connectorTarget = connection.getTarget();
 
-            String inputId = connectorInput.getParent().getId();
-            String outputId = connectorOutput.getParent().getId();
+            String sourceId = connectorSource.getParent().getId();
+            String targetId = connectorTarget.getParent().getId();
 
             switch (connection.getType()) {
                 case ExtendsConnectionSkin.TYPE:
-                    viewModel.addExtendsRelation(inputId, outputId);
+                    viewModel.addExtendsRelation(targetId, sourceId);
                     break;
                 case ImplementsConnectionSkin.TYPE:
-                    viewModel.addImplementsRelation(inputId, outputId);
+                    viewModel.addImplementsRelation(targetId, sourceId);
                     break;
                 case AssociationConnectionSkin.TYPE:
-                    viewModel.addAssociationRelation(inputId, outputId);
+                    viewModel.addAssociationRelation(sourceId, targetId);
                     break;
             }
 

@@ -59,7 +59,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
             layout.setAlignment(Pos.TOP_LEFT);
 
             for (MethodModel method : interfaceModel.getMethods()) {
-                final String methodEntry = methodGenerator.generate(method);
+                final String methodEntry = methodGenerator.generate(method).trim();
 
                 layout.getChildren().add(new Label(methodEntry));
             }
